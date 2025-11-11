@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>George — News</title>
+  <meta name="description" content="George — School news and notifications.">
+  <link rel="icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <svg class="logo" width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#g)"></rect>
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#6ec6ff"/>
+              <stop offset="1" stop-color="#002984"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div>
+          <h1>George</h1>
+          <p class="tagline">News & notifications</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search by title or text..." aria-label="Search news">
+        <a href="admin.html" class="primary small" title="Edit news">Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="news-grid" id="news-list" aria-live="polite">
+      <!-- Cards will load here -->
+    </section>
+
+    <section class="news-panel" id="news-details" aria-hidden="true">
+      <div class="backdrop" id="panel-backdrop"></div>
+      <div class="news-panel-content" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+        <button class="close" id="close-panel" aria-label="Close">&times;</button>
+        <div id="news-details-content"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>&copy; 2025 George · All rights reserved</small>
+    </div>
+  </footer>
+
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
