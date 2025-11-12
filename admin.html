@@ -65,14 +65,20 @@
         <textarea id="news-desc" rows="6" placeholder="Full news text"></textarea>
       </label>
 
-      <p class="muted" style="margin-top:.6rem">(No login — saving is public.)</p>
+      <!-- ADDED: YouTube URL input -->
+      <label>
+        YouTube URL (optional)
+        <input id="news-video" type="text" placeholder="https://www.youtube.com/watch?v=...">
+      </label>
+
+      <p class="muted" style="margin-top:.6rem">(Login required — only allowed admin emails can save.)</p>
 
       <div class="admin-actions">
         <button id="save-btn" class="primary small">Save</button>
         <button id="clear-btn" class="primary small" style="background:rgba(255,255,255,0.06);color:var(--accent-1)">Clear Form</button>
         <button id="export-btn" class="primary small" style="background:rgba(255,255,255,0.03);color:var(--accent-1)">Export JSON</button>
       </div>
-      <p class="muted" style="margin-top:.7rem"></p>
+      <p class="muted" style="margin-top:.7rem">Note: only the configured admin emails can create/update/delete posts.</p>
     </section>
 
     <section>
@@ -90,5 +96,4 @@
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="admin.js"></script>
 </body>
-
 </html>

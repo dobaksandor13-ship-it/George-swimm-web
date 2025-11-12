@@ -69,14 +69,61 @@ function renderList(items) {
 
 function showNewsDetails(n) {
   lastFocusedElement = document.activeElement;
+  // Base content
   detailsContent.innerHTML = `
     <h2 id="panel-title">${escapeHtml(n.title)}</h2>
     <div class="meta">${formatDate(n.date)}</div>
     <p>${escapeHtml(n.description)}</p>
   `;
+  // If there's a videoUrl, append clickable link and embed if possible
+  if (n.videoUrl) {
+    try {
+      const a = document.createElement('a');
+      a.href = n.videoUrl;
+      a.textContent = n.videoUrl;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.style.display = 'block';
+      a.style.marginTop = '0.6rem';
+      a.style.color = 'var(--accent-1)';
+      detailsContent.appendChild(a);
+
+      const vid = extractYouTubeId(n.videoUrl);
+      if (vid) {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(vid)}`;
+        iframe.width = "560";
+        iframe.height = "315";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.allowFullscreen = true;
+        iframe.style.marginTop = '1rem';
+        iframe.style.width = '100%';
+        iframe.style.height = '360px';
+        iframe.style.border = 'none';
+        detailsContent.appendChild(iframe);
+      }
+    } catch (e) {
+      // ignore if invalid URL
+    }
+  }
+
   detailsSection.setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
   if (closeBtn) closeBtn.focus();
+}
+
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const patterns = [
+    /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([^?&/]+)/,
+    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^?&/]+)/,
+    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([^?&/]+)/
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
 }
 
 function closeNewsDetails() {
@@ -88,7 +135,6 @@ function closeNewsDetails() {
 
 searchInput?.addEventListener('input', () => renderList(newsCache));
 closeBtn?.addEventListener('click', closeNewsDetails);
-backdrop?.addEventListener('click', closeNewsDetails);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNewsDetails(); });
 
 function formatDate(d){
@@ -103,5 +149,5 @@ function escapeHtml(str){
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/\"/g, "&quot;");
 }

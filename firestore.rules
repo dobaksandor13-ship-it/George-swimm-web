@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /news/{docId} {
+      allow read: if true;
+
+      // create: csak bejelentkezett felhasználó, és emailnek az admin listában kell lennie
+      allow create: if request.auth != null
+        && request.auth.token.email in [
+          "dobakcsalad1210@gmail.com",
+          "alexdobak09@gmail.com"
+        ]
+        && request.resource.data.keys().hasOnly(['title','description','date','videoUrl','authorId','createdAt'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 200
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 5000
+        && (request.resource.data.videoUrl == null || (request.resource.data.videoUrl is string && request.resource.data.videoUrl.size() <= 400))
+        && request.resource.data.authorId == request.auth.uid;
+
+      // update: csak a tulajdonos vagy az admin email lehetősége
+      allow update: if request.auth != null
+        && (request.auth.uid == resource.data.authorId
+            || request.auth.token.email in ["dobakcsalad1210@gmail.com","alexdobak09@gmail.com"])
+        && request.resource.data.keys().hasOnly(['title','description','date','videoUrl','authorId','createdAt'])
+        && request.resource.data.authorId == resource.data.authorId;
+
+      // delete: csak tulajdonos vagy admin email
+      allow delete: if request.auth != null
+        && (request.auth.uid == resource.data.authorId
+            || request.auth.token.email in ["dobakcsalad1210@gmail.com","alexdobak09@gmail.com"]);
+    }
+  }
+}
