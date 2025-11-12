@@ -1,4 +1,4 @@
-// main.js - public page: realtime news from Firestore (read)
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
@@ -15,7 +15,7 @@ const backdrop = document.getElementById('panel-backdrop');
 let lastFocusedElement = null;
 let newsCache = [];
 
-// Realtime listener: updates automatically
+
 const q = query(collection(db, 'news'), orderBy('date', 'desc'));
 onSnapshot(q, snapshot => {
   const items = [];
@@ -75,7 +75,6 @@ function showNewsDetails(n) {
     <div class="meta">${formatDate(n.date)}</div>
     <p>${escapeHtml(n.description)}</p>
   `;
-  // If there's a videoUrl, append clickable link and embed if possible
   if (n.videoUrl) {
     try {
       const a = document.createElement('a');
@@ -103,7 +102,7 @@ function showNewsDetails(n) {
         detailsContent.appendChild(iframe);
       }
     } catch (e) {
-      // ignore if invalid URL
+
     }
   }
 
