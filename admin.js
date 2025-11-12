@@ -80,7 +80,6 @@ async function loadListAndRender() {
 loadListAndRender();
 
 saveBtn.addEventListener('click', async () => {
-  // debug
   console.log('Attempting save. currentUser:', currentUser?.email, currentUser?.uid);
 
   if (!currentUser || !allowedAdmins.includes(currentUser.email)) return alert('Only admins can post news!');
@@ -144,7 +143,6 @@ function renderAdminList(items){
         <button data-id="${escapeHtml(it.id)}" class="del-btn primary small danger" ${!currentUser || !allowedAdmins.includes(currentUser.email) ? "disabled" : ""}>Delete</button>
       </div>
     `;
-    // If there's a video URL, append a small link element on the left side
     if (it.videoUrl) {
       try {
         const a = document.createElement('a');
@@ -157,13 +155,11 @@ function renderAdminList(items){
         a.style.color = 'var(--accent-1)';
         row.querySelector('.left').appendChild(a);
       } catch (e) {
-        // ignore invalid url
       }
     }
     listAdmin.appendChild(row);
   });
 
-  // Edit button
   listAdmin.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', (e)=>{
     if (!currentUser || !allowedAdmins.includes(currentUser.email)) return;
     const id = e.currentTarget.getAttribute('data-id');
@@ -177,7 +173,6 @@ function renderAdminList(items){
     window.scrollTo({top:0, behavior:'smooth'});
   }));
 
-  // Delete button
   listAdmin.querySelectorAll('.del-btn').forEach(b => b.addEventListener('click', async (e)=>{
     if (!currentUser || !allowedAdmins.includes(currentUser.email)) return;
     const id = e.currentTarget.getAttribute('data-id');
